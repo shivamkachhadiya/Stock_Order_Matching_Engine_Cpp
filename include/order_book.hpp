@@ -1,5 +1,4 @@
 #pragma once
-
 #include <unordered_map>
 #include "price_level.hpp"
 
@@ -10,15 +9,8 @@ private:
     std::unordered_map<int, PriceLevel> asks;
 
 public:
-    // ======================
-    // STORAGE ONLY
-    // ======================
-
-    PriceLevel &bidLevel(int price);
-    PriceLevel &askLevel(int price);
-
-    bool hasBid(int price) const;
-    bool hasAsk(int price) const;
+    void addLimit(Order order);
+    void addMarket(Order order);
 
     int totalBidQty(int price) const;
     int totalAskQty(int price) const;
