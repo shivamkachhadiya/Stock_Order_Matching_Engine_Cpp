@@ -5,7 +5,7 @@
 class PriceLevel
 {
 private:
-    std::deque<Order> orders; // FIFO queue
+    deque<Order> orders; // FIFO queue
 
 public:
     void add(const Order &order)

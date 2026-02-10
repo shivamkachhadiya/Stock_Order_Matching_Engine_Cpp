@@ -1,18 +1,30 @@
 #include "../include/order_book.hpp"
+#include "../include/matching_engine.hpp"
+
 #include <iostream>
+#include <chrono>
+#include <iomanip>
+#include <random>
+#include <thread>
+#include <vector>
+
+using namespace std;
+using namespace chrono;
 
 int main()
 {
-    OrderBook book;
+    MatchingEngine engine;
 
-    book.addLimit({1, Side::Buy, 100, 10, 0});
-    book.addLimit({2, Side::Buy, 100, 5, 0});
-    book.addLimit({3, Side::Sell, 105, 7, 0});
-    book.addLimit({4, Side::Sell, 100, 4, 0});
+    engine.submit({1, Side::Buy, 100, 10, 0});
+    engine.submit({2, Side::Sell, 100, 5, 0});
+    engine.submit({3, Side::Buy, 101, 15, 0});
 
-    std::cout << "Bid@100 = " << book.totalBidQty(100) << "\n";
-    std::cout << "Ask@105 = " << book.totalAskQty(105) << "\n";
+    this_thread::sleep_for(chrono::milliseconds(100));
 
-    std::cout << "BestBid = " << book.bestBid() << "\n";
-    std::cout << "BestAsk = " << book.bestAsk() << "\n";
+    engine.stop();
+
+    cout << "BestBid: " << engine.bestBid() << "\n";
+    cout << "BestAsk: " << engine.bestAsk() << "\n";
+
+    return 0;
 }

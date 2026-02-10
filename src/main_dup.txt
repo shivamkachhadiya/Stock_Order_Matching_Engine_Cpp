@@ -1,0 +1,94 @@
+#include "../include/order_book.hpp"
+#include "../include/matching_engine.hpp"
+
+#include <iostream>
+#include <chrono>
+#include <iomanip> // for std::setw, std::setprecision
+
+using namespace std;
+using namespace chrono;
+
+int main()
+{
+    // OrderBook book;
+
+    // cout << "===== ADD BUY ORDERS =====\n";
+
+    // book.addLimit({1, Side::Buy, 100, 10, 0});
+    // book.addLimit({2, Side::Buy, 100, 5, 0});
+
+    // cout << "Bid@100 = " << book.totalBidQty(100) << "\n"; // 15
+
+    // cout << "\n===== SELL 4 (partial match) =====\n";
+
+    // book.addLimit({3, Side::Sell, 100, 4, 0});
+
+    // // id=1 becomes 6
+    // // id=2 still 5
+    // cout << "Bid@100 = " << book.totalBidQty(100) << "\n"; // 11
+
+    // cout << "\n===== CANCEL order id=2 =====\n";
+
+    // book.cancel(2);
+
+    // // only id=1 qty=6 remains
+    // cout << "Bid@100 = " << book.totalBidQty(100) << "\n"; // 6
+
+    // cout << "\n===== FINAL BEST PRICES =====\n";
+
+    // cout << "BestBid = " << book.bestBid() << "\n";
+    // cout << "BestAsk = " << book.bestAsk() << "\n";
+
+    // OrderBook book;
+
+    // auto start = high_resolution_clock::now();
+    // for (int i = 0; i < 100000; ++i)
+    // {
+    //     book.addLimit({static_cast<unsigned long long>(i), Side::Buy, 100 + (i % 5), 10, 0});
+    // }
+
+    // auto end = high_resolution_clock::now();
+
+    // auto ns = duration_cast<nanoseconds>(end - start).count();
+
+    // cout << "Total time: " << ns << " ns\n";
+    // cout << "Avg per order: " << ns / 100000 << " ns\n";
+
+    // MatchingEngine engine;
+
+    // for (int i = 0; i < 100000; ++i)
+    //     engine.submit({static_cast<unsigned long long>(i), Side::Buy, 100, 10, 0});
+
+    // engine.stop();
+
+    constexpr int NUM_ORDERS = 100000;
+
+    cout << "===== Matching Engine Benchmark =====\n";
+    cout << "Number of orders: " << NUM_ORDERS << "\n";
+
+    MatchingEngine engine;
+
+    // Start benchmark
+    auto start = high_resolution_clock::now();
+
+    for (unsigned long long i = 0; i < NUM_ORDERS; ++i)
+    {
+        engine.submit({i, Side::Buy, 100, 10, 0});
+    }
+
+    auto end = high_resolution_clock::now();
+    engine.stop();
+
+    // Calculate timings
+    auto duration_ns = duration_cast<nanoseconds>(end - start).count();
+    double duration_ms = duration_ns / 1e6;
+    double avg_per_order_ns = static_cast<double>(duration_ns) / NUM_ORDERS;
+
+    // Pretty print
+    cout << fixed << setprecision(3);
+    cout << "\n===== Benchmark Results =====\n";
+    cout << setw(25) << left << "Total time: " << duration_ns << " ns (" << duration_ms << " ms)\n";
+    cout << setw(25) << left << "Average per order: " << avg_per_order_ns << " ns\n";
+
+    return 0;
+}
