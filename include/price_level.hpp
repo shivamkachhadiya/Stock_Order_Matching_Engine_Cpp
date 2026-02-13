@@ -1,11 +1,12 @@
 #pragma once
+
 #include <deque>
 #include "order.hpp"
 
 class PriceLevel
 {
 private:
-    deque<Order> orders; // FIFO queue
+    std::deque<Order> orders; // FIFO queue
 
 public:
     void add(const Order &order)

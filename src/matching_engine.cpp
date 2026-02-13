@@ -6,9 +6,7 @@ MatchingEngine::MatchingEngine()
     worker = thread(&MatchingEngine::process, this);
 }
 
-// =====================================================
 // LOCK-FREE SUBMIT (no mutex, no blocking)
-// =====================================================
 void MatchingEngine::submit(Order o)
 {
     {
@@ -18,9 +16,8 @@ void MatchingEngine::submit(Order o)
     cv.notify_one();
 }
 
-// =====================================================
+
 // MATCHING THREAD
-// =====================================================
 void MatchingEngine::process()
 {
     while (running)
@@ -43,9 +40,7 @@ void MatchingEngine::process()
     }
 }
 
-// =====================================================
 // STOP ENGINE
-// =====================================================
 void MatchingEngine::stop()
 {
     running = false;
@@ -55,9 +50,7 @@ void MatchingEngine::stop()
         worker.join();
 }
 
-// =====================================================
 // HELPERS
-// =====================================================
 int MatchingEngine::bestBid() const
 {
     return book.bestBid();

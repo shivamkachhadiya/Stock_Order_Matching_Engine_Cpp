@@ -25,9 +25,7 @@ int main()
 
     auto start = high_resolution_clock::now();
 
-    // =============================
     // Spawn producer threads
-    // =============================
     for (int t = 0; t < THREADS; ++t)
     {
         workers.emplace_back([&, t]()
@@ -70,9 +68,7 @@ int main()
 
     auto end = high_resolution_clock::now();
 
-    // =============================
     // Stats
-    // =============================
     auto ms = duration_cast<milliseconds>(end - start).count();
 
     int buys = buyCount.load();
@@ -82,9 +78,7 @@ int main()
     double throughput = (TOTAL * 1000.0) / ms;
     double fillRate = (100.0 * trades) / TOTAL;
 
-    // =============================
     // Results
-    // =============================
     cout << "\n===== STRESS TEST RESULTS =====\n";
 
     cout << "Total orders        : " << TOTAL << "\n";
